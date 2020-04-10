@@ -41,7 +41,7 @@ class MapViewController: UIViewController {
         } else {
             //send alert
         }
-    }
+    }  
     
     func checkLocationAuthorization() {
         switch CLLocationManager.authorizationStatus() {
