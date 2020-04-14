@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="HB9-CM-ec7">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="HB9-CM-ec7">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -62,6 +62,14 @@
                                                     <rect key="frame" x="10" y="28" width="176" height="128"/>
                                                     <color key="tintColor" name="weatherColor"/>
                                                 </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g0w-vd-dd4">
+                                                    <rect key="frame" x="155" y="12" width="20" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" image="trash" catalog="system"/>
+                                                    <connections>
+                                                        <action selector="pressDeleteButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="CMC-Pp-Bu7"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <color key="backgroundColor" red="0.78823529410000004" green="0.83921568629999999" blue="0.87450980389999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                             <constraints>
@@ -89,6 +97,7 @@
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <outlet property="cityName" destination="p16-uP-eW8" id="Ija-k1-rZ2"/>
+                                            <outlet property="deleteButton" destination="g0w-vd-dd4" id="LpV-lW-17f"/>
                                             <outlet property="symbol" destination="5Cq-yT-JDG" id="0Fh-GE-5WZ"/>
                                             <outlet property="temperature" destination="XgA-Qq-72w" id="Xjh-7E-lmI"/>
                                             <outlet property="time" destination="Sss-RX-tZA" id="Nwa-D9-zah"/>
@@ -127,6 +136,9 @@
                                         </constraints>
                                         <color key="tintColor" name="Color"/>
                                         <state key="normal" image="magnifyingglass" catalog="system"/>
+                                        <connections>
+                                            <action selector="pressSearchButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lDv-uW-BpQ"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -152,6 +164,7 @@
                     <navigationItem key="navigationItem" id="f6a-Yz-kez"/>
                     <connections>
                         <outlet property="cityCollectionView" destination="wJu-l5-u6k" id="fsv-45-MEd"/>
+                        <outlet property="searchBar" destination="udd-S2-0pO" id="9i4-Nh-c7I"/>
                         <segue destination="gNK-cA-vC9" kind="show" identifier="cityBoardtoDetailWeather" id="Yv7-J7-F3m"/>
                     </connections>
                 </viewController>
@@ -391,15 +404,16 @@
         </scene>
     </scenes>
     <resources>
-        <image name="chart.bar" catalog="system" width="64" height="44"/>
-        <image name="cloud.rain" catalog="system" width="64" height="62"/>
-        <image name="location" catalog="system" width="64" height="56"/>
-        <image name="magnifyingglass" catalog="system" width="64" height="56"/>
-        <image name="map" catalog="system" width="64" height="56"/>
-        <image name="smoke" catalog="system" width="64" height="46"/>
-        <image name="sun.max" catalog="system" width="64" height="62"/>
-        <image name="sunrise" catalog="system" width="64" height="48"/>
-        <image name="sunset" catalog="system" width="64" height="48"/>
+        <image name="chart.bar" catalog="system" width="128" height="90"/>
+        <image name="cloud.rain" catalog="system" width="128" height="125"/>
+        <image name="location" catalog="system" width="128" height="115"/>
+        <image name="magnifyingglass" catalog="system" width="128" height="115"/>
+        <image name="map" catalog="system" width="128" height="113"/>
+        <image name="smoke" catalog="system" width="128" height="93"/>
+        <image name="sun.max" catalog="system" width="128" height="124"/>
+        <image name="sunrise" catalog="system" width="128" height="97"/>
+        <image name="sunset" catalog="system" width="128" height="97"/>
+        <image name="trash" catalog="system" width="121" height="128"/>
         <namedColor name="Color">
             <color red="0.94099998474121094" green="0.96100002527236938" blue="0.97600001096725464" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
