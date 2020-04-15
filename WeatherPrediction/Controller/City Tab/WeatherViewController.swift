@@ -42,6 +42,7 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
             cell.time.text = dateString
             cell.startTimer()
             cell.cityName.text = city.name
+            cell.symbol.image = UIImage(named: city.weatherDescription)
             
             if let temp = city.weatherStat["temp"] as? Double {
                 cell.temperature.text = String(temp)+"°"

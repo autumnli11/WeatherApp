@@ -32,5 +32,9 @@ class CityCollectionViewCell: UICollectionViewCell {
     func startTimer() {
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector:#selector(tick) , userInfo: nil, repeats: true)
     }
+    
+//   func updateUI() {
+//        symbol.image = UIImage(named: weather.weather)
+//    }
 
 }
