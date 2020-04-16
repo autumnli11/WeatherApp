@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 
 var timer = Timer()
-class WeatherViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class WeatherViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate {
     
     
     @IBOutlet var searchBar: UITextField!
@@ -55,6 +55,8 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
+    // TODO: add delete button function
+    
     
 
     @IBAction func pressSearchButton(_ sender: UIButton) {
@@ -68,7 +70,7 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
                     let indexSet = IndexSet(integersIn: range)
                     self.cityCollectionView.reloadSections(indexSet)
                     self.searchBar.text = ""
-
+                    self.hideKeyboard()
                 }
             }
         }
@@ -93,8 +95,18 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
         let layout = self.cityCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.itemSize = CGSize(width: (self.cityCollectionView.frame.size.width - 20)/2, height: self.cityCollectionView.frame.size.height/3)
         self.cityCollectionView.allowsSelection = false
+        
+        searchBar.delegate = self
     }
     
+    func hideKeyboard() {
+        searchBar.resignFirstResponder()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        hideKeyboard()
+        return true
+    }
 
 
 }
