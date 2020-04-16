@@ -34,6 +34,7 @@ class MapViewController: UIViewController {
             mapView.setRegion(region, animated: true)
         }
     }
+    
     func checkLocationServices() {
         if CLLocationManager.locationServicesEnabled() {
             setUpLocationManager()

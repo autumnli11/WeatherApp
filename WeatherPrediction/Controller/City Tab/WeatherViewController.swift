@@ -12,7 +12,6 @@ import Foundation
 var timer = Timer()
 class WeatherViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate {
     
-    
     @IBOutlet var searchBar: UITextField!
     @IBOutlet weak var cityCollectionView: UICollectionView!
     
@@ -23,12 +22,10 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        
         let index = indexPath.item
         let city = cityData.cities[index]
         
 //        dateLabel.text = DateFormatter.localizedString(from: Date(), dateStyle: .long, timeStyle: .none)
-        
         
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cityCell", for: indexPath) as? CityCollectionViewCell {
             
@@ -45,9 +42,8 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
             cell.symbol.image = UIImage(named: city.weatherDescription)
             
             if let temp = city.weatherStat["temp"] as? Double {
-                cell.temperature.text = String(temp)+"°"
+                cell.temperature.text = String(temp)+"°C"
             }
-            
             
             return cell
         } else {
@@ -55,9 +51,34 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
+    //TODO: can't select cell because UI seems weird despite having set up the layout. Maybe the CollectionView Constraint isn't right
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let index = indexPath.item
+        let city = cityData.cities[index]
+        
+        let dest = storyboard?.instantiateViewController(identifier:
+            "detailWeatherViewController") as? detailWeatherViewController
+        
+        dest?.cityName.text = city.name
+        dest?.weather.text = city.weatherDescription
+        if let humidty = city.weatherStat["humidity"] as? String {
+             dest?.humidity.text = humidty
+        }
+        dest?.weatherSymbol.image = UIImage(named: city.weatherDescription)
+        if let temp = city.weatherStat["temp"] as? Double {
+            dest?.temperature.text = String(temp)+"°C"
+        }
+//        dest?.sunrise.text
+//        dest?.sunset.text
+//
+        self.navigationController?.pushViewController(dest!, animated: true)
+        print("push")
+    }
+    
+
+    
     // TODO: add delete button function
-    
-    
 
     @IBAction func pressSearchButton(_ sender: UIButton) {
         if let location = searchBar.text {
@@ -90,12 +111,6 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        
-        let layout = self.cityCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
-        layout.itemSize = CGSize(width: (self.cityCollectionView.frame.size.width - 20)/2, height: self.cityCollectionView.frame.size.height/3)
-        self.cityCollectionView.allowsSelection = false
-        
         searchBar.delegate = self
     }
     
@@ -107,7 +122,21 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
         hideKeyboard()
         return true
     }
+}
 
-
+extension WeatherViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let bounds = cityCollectionView.bounds
+        return CGSize(width: bounds.width / 2 - 10, height: bounds.height / 4)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
 }
 
