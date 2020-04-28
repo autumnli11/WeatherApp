@@ -10,73 +10,15 @@ import UIKit
 import Foundation
 
 var timer = Timer()
-class WeatherViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate {
+class WeatherViewController: UIViewController, UITextFieldDelegate {
     
+    //Interface Builder
     @IBOutlet var searchBar: UITextField!
     @IBOutlet weak var cityCollectionView: UICollectionView!
     
+    //Properties
+    var selectedCity: City?
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return cityData.cities.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let index = indexPath.item
-        let city = cityData.cities[index]
-        
-//        dateLabel.text = DateFormatter.localizedString(from: Date(), dateStyle: .long, timeStyle: .none)
-        
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cityCell", for: indexPath) as? CityCollectionViewCell {
-            
-            cell.timezone = city.timezone
-            let currentDate = Date()
-            let format = DateFormatter()
-            format.timeZone = TimeZone(secondsFromGMT: city.timezone)
-            format.dateFormat = "h:mm a"
-            let dateString = format.string(from: currentDate)
-
-            cell.time.text = dateString
-            cell.startTimer()
-            cell.cityName.text = city.name
-            cell.symbol.image = UIImage(named: city.weatherDescription)
-            
-            if let temp = city.weatherStat["temp"] as? Double {
-                cell.temperature.text = String(temp)+"°C"
-            }
-            
-            return cell
-        } else {
-            return UICollectionViewCell()
-        }
-    }
-    
-    //TODO: can't select cell because UI seems weird despite having set up the layout. Maybe the CollectionView Constraint isn't right
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let index = indexPath.item
-        let city = cityData.cities[index]
-        
-        let dest = storyboard?.instantiateViewController(identifier:
-            "detailWeatherViewController") as? detailWeatherViewController
-        
-        dest?.cityName.text = city.name
-        dest?.weather.text = city.weatherDescription
-        if let humidty = city.weatherStat["humidity"] as? String {
-             dest?.humidity.text = humidty
-        }
-        dest?.weatherSymbol.image = UIImage(named: city.weatherDescription)
-        if let temp = city.weatherStat["temp"] as? Double {
-            dest?.temperature.text = String(temp)+"°C"
-        }
-//        dest?.sunrise.text
-//        dest?.sunset.text
-//
-        self.navigationController?.pushViewController(dest!, animated: true)
-        print("push")
-    }
-    
-
     
     // TODO: add delete button function
 
@@ -108,10 +50,20 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.present(alert, animated: true, completion: nil)
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
+        cityCollectionView.allowsSelection = true
+        
+        let flowLayout = cityCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        flowLayout.minimumLineSpacing = 20
+        flowLayout.minimumInteritemSpacing = 20
+        flowLayout.sectionInset.left = 20
+        flowLayout.sectionInset.right = 20
+        
+        cityCollectionView.delegate = self
+        cityCollectionView.dataSource = self
+        
     }
     
     func hideKeyboard() {
@@ -125,18 +77,68 @@ class WeatherViewController: UIViewController, UICollectionViewDelegate, UIColle
 }
 
 extension WeatherViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
-    }
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let bounds = cityCollectionView.bounds
-        return CGSize(width: bounds.width / 2 - 10, height: bounds.height / 4)
+        let flowlayout = collectionViewLayout as! UICollectionViewFlowLayout
+        flowlayout.sectionInset.top = 10
+        flowlayout.sectionInset.bottom = 10
+        
+        let space: CGFloat = (flowlayout.minimumInteritemSpacing ) + (flowlayout.sectionInset.left) + (flowlayout.sectionInset.right)
+        let size: CGFloat = (cityCollectionView.frame.size.width - space) / 2.0
+        return CGSize(width: size, height: 200.0)
+    }
+}
+
+extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return cityData.cities.count
+    }
+        
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let index = indexPath.item
+        let city = cityData.cities[index]
+        
+//        dateLabel.text = DateFormatter.localizedString(from: Date(), dateStyle: .long, timeStyle: .none)
+        
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cityCell", for: indexPath) as? CityCollectionViewCell {
+            cell.contentView.layer.cornerRadius = 5.0
+            cell.timezone = city.timezone
+            let currentDate = Date()
+            let format = DateFormatter()
+            format.timeZone = TimeZone(secondsFromGMT: city.timezone)
+            format.dateFormat = "h:mm a"
+            let dateString = format.string(from: currentDate)
+
+            cell.time.text = dateString
+            cell.startTimer()
+            cell.cityName.text = city.name
+            cell.symbol.image = UIImage(named: city.weatherDescription)
+
+            if let temp = city.weatherStat["temp"] as? Double {
+                cell.temperature.text = String(temp)+"°C"
+            }
+
+            return cell
+        } else {
+            return UICollectionViewCell()
+        }
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let index = indexPath.item
+        selectedCity = cityData.cities[index]
+        performSegue(withIdentifier: "cityBoardtoDetailWeather", sender: self)
+    }
+}
+
+// Segue
+extension WeatherViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "cityBoardtoDetailWeather" {
+            let destinationVC = segue.destination as! detailWeatherViewController
+            destinationVC.selectedCity = selectedCity
+        }
+    }
 }
 
