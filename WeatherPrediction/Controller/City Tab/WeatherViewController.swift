@@ -66,6 +66,11 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        cityCollectionView.reloadData()
+    }
+    
     func hideKeyboard() {
         searchBar.resignFirstResponder()
     }
@@ -95,6 +100,8 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
         
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
+        print(cityData.cities)
+        
         let index = indexPath.item
         let city = cityData.cities[index]
         
@@ -108,6 +115,9 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
             format.timeZone = TimeZone(secondsFromGMT: city.timezone)
             format.dateFormat = "h:mm a"
             let dateString = format.string(from: currentDate)
+            
+            cell.deleteButton?.tag = indexPath.row
+            cell.deleteButton?.addTarget(self, action: #selector(deleteCity(sender:)), for: UIControl.Event.touchUpInside)
 
             cell.time.text = dateString
             cell.startTimer()
@@ -130,7 +140,15 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
         selectedCity = cityData.cities[index]
         performSegue(withIdentifier: "cityBoardtoDetailWeather", sender: self)
     }
+    
+    @objc func deleteCity(sender:UIButton) {
+        let i = sender.tag
+        cityData.cities.remove(at: i)
+        cityCollectionView.reloadData()
+    }
 }
+
+
 
 // Segue
 extension WeatherViewController {

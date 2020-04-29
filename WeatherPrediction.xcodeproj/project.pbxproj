@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		43E2823B245976E500E297D8 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E2823A245976E500E297D8 /* Location.swift */; };
 		9CDF04A2243EDF1E007EDF4D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CDF04A1243EDF1E007EDF4D /* AppDelegate.swift */; };
 		9CDF04A4243EDF1E007EDF4D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CDF04A3243EDF1E007EDF4D /* SceneDelegate.swift */; };
 		9CDF04A6243EDF1E007EDF4D /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CDF04A5243EDF1E007EDF4D /* WeatherViewController.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		43E2823A245976E500E297D8 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		9CDF049E243EDF1E007EDF4D /* WeatherPrediction.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherPrediction.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CDF04A1243EDF1E007EDF4D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9CDF04A3243EDF1E007EDF4D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 				9CDF04B6243EE1CD007EDF4D /* WeatherManager.swift */,
 				9CDF04C2243EF785007EDF4D /* WeatherData.swift */,
 				9CDF04C4243F005C007EDF4D /* CityData.swift */,
+				43E2823A245976E500E297D8 /* Location.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -198,6 +201,7 @@
 			files = (
 				9CDF04C1243EF1DB007EDF4D /* CityCollectionViewCell.swift in Sources */,
 				9CDF04B7243EE1CD007EDF4D /* WeatherManager.swift in Sources */,
+				43E2823B245976E500E297D8 /* Location.swift in Sources */,
 				9CDF04BE243EE40F007EDF4D /* MapViewController.swift in Sources */,
 				9CDF04C5243F005C007EDF4D /* CityData.swift in Sources */,
 				9CDF04A6243EDF1E007EDF4D /* WeatherViewController.swift in Sources */,
