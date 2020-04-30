@@ -124,7 +124,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
                 guard let sys = dictionary["sys"] as? [String: Any] else { return }
                 guard let coord = dictionary["coord"] as? [String: Any] else { return }
                 guard let description = weatherObj["description"] as? String else { return }
-                self.selectedCity = City(name: name, weatherDescription: description, timezone: timezone, weatherStat: main, sun:sys , coord: coord)
+                guard let imageDescription = weatherObj["main"] as? String else { return }
+                self.selectedCity = City(name: name, weatherDescription: description, timezone: timezone, weatherStat: main, sun:sys , coord: coord, imageDescription: imageDescription)
             }
         
             completion()

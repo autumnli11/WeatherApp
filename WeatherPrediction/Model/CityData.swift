@@ -16,14 +16,16 @@ class City {
     var weatherStat: [String: Any] // {"humidity": 81, "temp": "286.87"}
     var sun: [String: Any] // {"sunrise": 1586813878, "sunset": 1586861455}
     var coord: [String: Any] // {"lat" = 39.91, "lon" = 116.4}
+    var imageDescription : String // "Clouds“
     
-    init(name: String, weatherDescription: String, timezone: Int, weatherStat: [String: Any], sun: [String: Any], coord: [String: Any]) {
+    init(name: String, weatherDescription: String, timezone: Int, weatherStat: [String: Any], sun: [String: Any], coord: [String: Any], imageDescription: String) {
         self.name = name
         self.weatherDescription = weatherDescription
         self.timezone = timezone
         self.weatherStat = weatherStat
         self.sun = sun
         self.coord = coord
+        self.imageDescription = imageDescription
     }
     
 }
@@ -63,8 +65,9 @@ class CityData {
                 guard let sys = dictionary["sys"] as? [String: Any] else { return }
                 guard let coord = dictionary["coord"] as? [String: Any] else { return }
                 guard let description = weatherObj["description"] as? String else { return }
+                guard let imageDescription = weatherObj["main"] as? String else { return }
 
-                self.cities.append(City(name: name, weatherDescription: description, timezone: timezone, weatherStat: main, sun:sys , coord: coord))
+                self.cities.append(City(name: name, weatherDescription: description, timezone: timezone, weatherStat: main, sun:sys , coord: coord, imageDescription: imageDescription))
             }
             
             completion()
