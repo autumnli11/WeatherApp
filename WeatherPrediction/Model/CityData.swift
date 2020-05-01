@@ -33,6 +33,7 @@ class City {
 class CityData {
     var cities = [City]();
     var error = false;
+    var dup = false;
     
     func fetchData(city: String, completion: @escaping () -> Void) {
         var urlString = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=df9a9d56a28dff1eaa5c354658257615&units=metric"
@@ -67,7 +68,15 @@ class CityData {
                 guard let description = weatherObj["description"] as? String else { return }
                 guard let imageDescription = weatherObj["main"] as? String else { return }
 
-                self.cities.append(City(name: name, weatherDescription: description, timezone: timezone, weatherStat: main, sun:sys , coord: coord, imageDescription: imageDescription))
+                for city in self.cities {
+                    if city.name == name {
+                        self.dup = true
+                        
+                    }
+                }
+                if !self.dup {
+                    self.cities.append(City(name: name, weatherDescription: description, timezone: timezone, weatherStat: main, sun:sys , coord: coord, imageDescription: imageDescription))
+                }
             }
             
             completion()

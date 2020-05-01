@@ -23,6 +23,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet var alertLabel: UILabel!
     
     var selectedCity : City!
+    var selectedCord : CLLocationCoordinate2D!
     
     var currentLocation: CLLocation!
     var locationManager = CLLocationManager()
@@ -36,31 +37,42 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         
         let initialLocation = CLLocation(latitude: 37.8719, longitude: -122.2585)
         mapView.centerToLocation(initialLocation)
+//
+//        let oahuCenter = CLLocation(latitude: 37.8719, longitude: -122.2585)
+//        let region = MKCoordinateRegion(
+//          center: oahuCenter.coordinate,
+//          latitudinalMeters: 50000,
+//          longitudinalMeters: 60000)
+//        mapView.setCameraBoundary(
+//          MKMapView.CameraBoundary(coordinateRegion: region),
+//          animated: true)
         
-        let oahuCenter = CLLocation(latitude: 37.8719, longitude: -122.2585)
-        let region = MKCoordinateRegion(
-          center: oahuCenter.coordinate,
-          latitudinalMeters: 50000,
-          longitudinalMeters: 60000)
-        mapView.setCameraBoundary(
-          MKMapView.CameraBoundary(coordinateRegion: region),
-          animated: true)
+//        let zoomRange = MKMapView.CameraZoomRange(maxCenterCoordinateDistance: 200000)
+//        mapView.setCameraZoomRange(zoomRange, animated: true)
         
-        let zoomRange = MKMapView.CameraZoomRange(maxCenterCoordinateDistance: 200000)
-        mapView.setCameraZoomRange(zoomRange, animated: true)
-        
-        // Show location on map
-        let artwork = Location(
-          title: "UC Berkeley",
-          locationName: "weather prediction",
-          discipline: "University",
-          coordinate: CLLocationCoordinate2D(latitude: 37.8719, longitude: -122.2585))
-        mapView.addAnnotation(artwork)
-        mapView.delegate = self
+//        // Show location on map
+//        let artwork = Location(
+//          title: "UC Berkeley",
+//          locationName: "weather prediction",
+//          discipline: "University",
+//          coordinate: CLLocationCoordinate2D(latitude: 37.8719, longitude: -122.2585))
+//        mapView.addAnnotation(artwork)
+//        mapView.delegate = self
         
         // make the map recognize long tap
         let longTapGesture = UILongPressGestureRecognizer(target: self, action: #selector(longTap))
         mapView.addGestureRecognizer(longTapGesture)
+        
+        popOver.layer.cornerRadius = 15
+        alertPopOver.layer.cornerRadius = 15
+        
+        saveButton.layer.cornerRadius = 12
+        saveButton.layer.borderWidth = 1
+        saveButton.layer.borderColor = UIColor.darkGray.cgColor
+        
+        cancelButton.layer.cornerRadius = 12
+        cancelButton.layer.borderWidth = 1
+        cancelButton.layer.borderColor = UIColor.darkGray.cgColor
         
     }
     
@@ -68,6 +80,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         if sender.state == .began {
             let location = sender.location(in: mapView)
             let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
+            self.selectedCord = coordinate
             fetchData(lat: coordinate.latitude, lon: coordinate.longitude) {
                 DispatchQueue.main.async {
                     self.descriptionLabel.text = self.selectedCity.weatherDescription
@@ -79,22 +92,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
                     self.popOver.center = self.view.center
                 }
             }
-            
-//            let locationInView = sender.location(in: mapView)
-//            let locationOnMap = mapView.convert(locationInView, toCoordinateFrom: mapView)
-//            addAnnotation(location: locationOnMap)
         }
     }
 
-//
-//    func checkLocationServices() {
-//        if CLLocationManager.locationServicesEnabled() {
-//            setUpLocationManager()
-//            checkLocationAuthorization()
-//        } else {
-//            //send alert
-//        }
-//    }
     
     func fetchData(lat: Double, lon: Double, completion: @escaping () -> Void) {
         let urlString = "http://api.openweathermap.org/data/2.5/weather?lat=\(lat)&lon=\(lon)&appid=df9a9d56a28dff1eaa5c354658257615&units=metric"
@@ -131,15 +131,27 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
             completion()
         }.resume()
     }
-
-    func addAnnotation(location: CLLocationCoordinate2D){
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = location
-            annotation.title = "Some Title"
-            annotation.subtitle = "Some Subtitle"
-            self.mapView.addAnnotation(annotation)
+    
+    func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action2 = UIAlertAction(title: "I got it", style: .default, handler: reset)
+        alert.addAction(action2)
+        self.present(alert, animated: true, completion: nil)
     }
     
+    func reset(alert: UIAlertAction!) {
+        selectedCity = nil
+        selectedCord = nil
+    }
+    
+
+    func addAnnotation(){
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = selectedCord
+        annotation.title = selectedCity.name
+        annotation.subtitle = selectedCity.weatherDescription
+        self.mapView.addAnnotation(annotation)
+    }
     
 
     @IBAction func pressCancelButton(_ sender: UIButton) {
@@ -148,12 +160,20 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
 
     
     @IBAction func pressSaveButton(_ sender: UIButton) {
+        for city in cityData.cities {
+            if (city.name == selectedCity.name) {
+                showAlert(title: "Save Failed", message: "This city has already been saved!")
+                self.popOver.removeFromSuperview()
+                return
+            }
+        }
         cityData.cities.append(selectedCity)
+        addAnnotation()
+        showSavedAlert()
         self.popOver.removeFromSuperview()
-        showAlert()
     }
     
-    func showAlert() {
+    func showSavedAlert() {
         alertLabel.text = "Saved Successfully!"
         alertPopOver.center = self.view.center
 

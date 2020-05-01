@@ -29,6 +29,10 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
                     if cityData.error {
                         self.showAlert(title: "Sorry...", message: "This is an invalid city name:( Please try gain.")
                     }
+                    if cityData.dup {
+                        self.showSavedFailAlert(title: "Save Failed", message: "This city has already been saved!")
+                        cityData.dup = false
+                    }
                     let range = Range(uncheckedBounds: (0, self.cityCollectionView.numberOfSections))
                     let indexSet = IndexSet(integersIn: range)
                     self.cityCollectionView.reloadSections(indexSet)
@@ -41,6 +45,13 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     
     func clearSearchBar(alert: UIAlertAction!){
         self.searchBar.text = ""
+    }
+    
+    func showSavedFailAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action2 = UIAlertAction(title: "I got it", style: .default, handler: clearSearchBar)
+        alert.addAction(action2)
+        self.present(alert, animated: true, completion: nil)
     }
     
     func showAlert(title: String, message: String) {
@@ -119,18 +130,17 @@ extension WeatherViewController: UICollectionViewDelegate, UICollectionViewDataS
             let dateArr = dateString.components(separatedBy: " ")
             let dateTime = dateArr[0].components(separatedBy: ":")[0]
             if dateArr[1] == "AM" {
-                
                 if (Int(dateTime)! >= 6) && (Int(dateTime)! < 12){
                     cell.contentView.backgroundColor = UIColor(rgb: 0xE4B888)
                         
                 } else {
-                    cell.contentView.backgroundColor = UIColor(rgb: 0xDD9863)
+                    cell.contentView.backgroundColor = UIColor(rgb: 0x968788)
                 }
             } else {
                 if (Int(dateTime)! >= 6) && (Int(dateTime)! < 12){
                     cell.contentView.backgroundColor = UIColor(rgb: 0xAE7467)
                 } else {
-                    cell.contentView.backgroundColor = UIColor(rgb: 0x968788)
+                    cell.contentView.backgroundColor = UIColor(rgb: 0xDD9863)
                 }
             }
                         
