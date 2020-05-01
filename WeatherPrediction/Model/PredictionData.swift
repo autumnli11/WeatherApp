@@ -66,9 +66,9 @@ class PredictionData {
         set.lineWidth = 1.75
         set.circleRadius = 5.0
         set.circleHoleRadius = 2.5
-        set.setColor(.black)
-        set.setCircleColor(.black)
-        set.highlightColor = .black
+        set.setColor(.darkGray)
+        set.setCircleColor(.darkGray)
+        set.highlightColor = .darkGray
         set.drawValuesEnabled = false
         
         return LineChartData(dataSet: set)

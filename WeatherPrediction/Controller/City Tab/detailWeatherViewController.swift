@@ -94,7 +94,7 @@ class detailWeatherViewController: UIViewController {
             chart.xAxis.valueFormatter = IndexAxisValueFormatter(values: dateStrings)
         chart.xAxis.granularity = 1
             
-//            chart.animate(xAxisDuration: 2.5)
+        chart.animate(xAxisDuration: 2)
     }
     
 }

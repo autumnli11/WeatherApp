@@ -163,7 +163,7 @@
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunrise" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Kl5-SJ-fij">
                                                 <rect key="frame" x="0.0" y="-1.5" width="40" height="39.5"/>
-                                                <color key="tintColor" name="weatherColor"/>
+                                                <color key="tintColor" red="0.25492018459999999" green="0.29450911279999997" blue="0.2588217854" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="bqw-Jt-XfU"/>
                                                     <constraint firstAttribute="width" constant="40" id="btA-ca-Dof"/>
@@ -186,7 +186,7 @@
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sunset" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="j6g-kE-yrX">
                                                 <rect key="frame" x="0.0" y="-1.5" width="40" height="39.5"/>
-                                                <color key="tintColor" name="weatherColor"/>
+                                                <color key="tintColor" red="0.25492018459999999" green="0.29450911279999997" blue="0.2588217854" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="40" id="avp-nQ-ThS"/>
                                                     <constraint firstAttribute="width" constant="40" id="uSX-3Q-ZIS"/>
